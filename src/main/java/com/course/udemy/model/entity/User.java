@@ -3,19 +3,18 @@ package com.course.udemy.model.entity;
 import com.course.udemy.model.enums.Audience;
 import com.course.udemy.model.enums.Experience;
 import com.course.udemy.model.enums.Type;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "users")
 public class User {
 
