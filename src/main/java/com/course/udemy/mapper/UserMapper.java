@@ -1,12 +1,13 @@
 package com.course.udemy.mapper;
 
 import com.course.udemy.config.daoconfig.UserPrinciple;
+import com.course.udemy.model.dto.JwtDto;
 import com.course.udemy.model.dto.UserDto;
 import com.course.udemy.model.entity.User;
 import com.course.udemy.model.enums.Type;
-import com.course.udemy.request.RegisterRequest;
+import com.course.udemy.pojo.request.RegisterRequest;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -47,6 +48,17 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .type(user.getType())
+                .build();
+    }
+    public JwtDto toUserPrinciple(UserPrinciple userDetails, String token){
+        return JwtDto.builder()
+                .id(userDetails.getId())
+                .firstName(userDetails.getFirstName())
+                .lastName(userDetails.getLastName())
+                .email(userDetails.getEmail())
+                .token(token)
+                .role(userDetails.getType())
+                .tokenType(token)
                 .build();
     }
 }

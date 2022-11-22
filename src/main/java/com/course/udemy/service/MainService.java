@@ -1,10 +1,11 @@
 package com.course.udemy.service;
 
+import com.course.udemy.model.dto.JwtDto;
 import com.course.udemy.model.dto.UserDto;
-import com.course.udemy.request.RegisterRequest;
+import com.course.udemy.pojo.request.RegisterRequest;
 
 public interface MainService {
     UserDto registerUser(RegisterRequest request) throws IllegalAccessException;
 
-    UserDto login(String email, String password);
+    JwtDto login(String email, String password);
 }

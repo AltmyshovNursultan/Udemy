@@ -1,20 +1,16 @@
 package com.course.udemy.controler;
 
-import com.auth0.jwt.JWT;
 import com.course.udemy.Jwt2.AuthenticateRequest;
 import com.course.udemy.Jwt2.AuthenticationResponse;
 import com.course.udemy.Jwt2.JwtUtil;
 import com.course.udemy.config.daoconfig.UserPrincipleDetailService;
-import com.course.udemy.model.dto.UserDto;
-import com.course.udemy.request.RegisterRequest;
+import com.course.udemy.pojo.request.RegisterRequest;
 import com.course.udemy.service.MainService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,15 +18,17 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class MainController {
     private final MainService mainService;
-    @Autowired
-    private UserPrincipleDetailService userDetailsService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    public MainController(MainService mainService) {
+    private final UserPrincipleDetailService userDetailsService;
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+
+    public MainController(MainService mainService, UserPrincipleDetailService userDetailsService, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.mainService = mainService;
+        this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -40,9 +38,10 @@ public class MainController {
     }
 
     @GetMapping("login")
-    public ResponseEntity<?> login(String email,String password) {
+    public ResponseEntity<?> login(@RequestParam String email, String password) {
         return ResponseEntity.ok(mainService.login(email,password));
     }
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticateRequest request){
         try {

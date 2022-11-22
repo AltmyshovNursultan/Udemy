@@ -1,6 +1,7 @@
 package com.course.udemy.model.enums;
 
-import com.course.udemy.request.RegisterRequest;
+
+import com.course.udemy.pojo.request.RegisterRequest;
 
 public enum Type {
     ROLE_ADMIN {

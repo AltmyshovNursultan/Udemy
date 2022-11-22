@@ -2,8 +2,8 @@ package com.course.udemy.config;
 
 import com.course.udemy.Jwt2.AuthFilter;
 import com.course.udemy.config.daoconfig.UserPrincipleDetailService;
-import com.course.udemy.dao.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.course.udemy.config.jwt.JwtAuthenticationFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -22,18 +22,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 @Import(SwaggerConfig.class)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserPrincipleDetailService useDetailService;
-    private final UserRepo userRepo;
-    @Autowired
-    private AuthFilter jwtUtil;
-
-    public SpringSecurityConfig(UserPrincipleDetailService useDetailService, UserRepo userRepo) {
-        this.useDetailService = useDetailService;
-        this.userRepo = userRepo;
-    }
-
+    private final AuthFilter jwtUtil;
+//   private final JwtAuthenticationFilter filter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -49,6 +43,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .antMatcher("/main/register")
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/main/authenticate").permitAll().anyRequest().authenticated()
