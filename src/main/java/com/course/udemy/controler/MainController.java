@@ -6,6 +6,8 @@ import com.course.udemy.Jwt2.JwtUtil;
 import com.course.udemy.config.daoconfig.UserPrincipleDetailService;
 import com.course.udemy.pojo.request.RegisterRequest;
 import com.course.udemy.service.MainService;
+import com.course.udemy.service.ResetPasswordService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/main")
 @CrossOrigin
+@RequiredArgsConstructor
 public class MainController {
     private final MainService mainService;
 
@@ -23,13 +26,7 @@ public class MainController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-
-    public MainController(MainService mainService, UserPrincipleDetailService userDetailsService, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
-        this.mainService = mainService;
-        this.userDetailsService = userDetailsService;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-    }
+    private final ResetPasswordService passwordService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(RegisterRequest request) throws IllegalAccessException {
@@ -54,4 +51,16 @@ public class MainController {
         final String token = jwtUtil.generateToken(userDetails1);
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(String email){
+        return ResponseEntity.ok(passwordService.sendEmailForReset(email));
+    }
+    @PostMapping("/resetPassword/{token}")
+    public ResponseEntity<?> resetPassword(@PathVariable(name = "token") String token ,@RequestParam String resetCode,
+                                           @RequestParam String confirmedCode){
+        if (!resetCode.equals(confirmedCode)) return ResponseEntity.badRequest().body("You password is not coincide!");
+        return passwordService.setUpNewPassword(token,resetCode,confirmedCode);
+    }
+
 }
