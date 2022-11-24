@@ -1,7 +1,6 @@
 package com.course.udemy.service.impls;
 
 import com.course.udemy.config.daoconfig.UserPrinciple;
-import com.course.udemy.config.daoconfig.UserPrincipleDetailService;
 import com.course.udemy.config.jwt.UtilJwt;
 import com.course.udemy.dao.UserRepo;
 import com.course.udemy.mapper.UserMapper;
